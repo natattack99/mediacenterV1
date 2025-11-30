@@ -2,15 +2,49 @@
   import { invoke } from "@tauri-apps/api/core";
 
   let name = $state("");
+  let greetMsg = $state("");
+
+  async function greet(event: Event) {
+    event.preventDefault();
+    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+    greetMsg = await invoke("greet", { name });
+  }
 </script>
 
 <main class="container">
-  <h1>Media Center</h1>
-  <p>Click below to start.</p>
-  <a href="/library"><button>Start</button></a>
+  <h1>Welcome to Tauri + Svelte</h1>
+
+  <div class="row">
+    <a href="/demo/test1">
+      <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
+    </a>
+    <a href="/demo/test2">
+      <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
+    </a>
+    <a href="/demo/test3">
+      <img src="/svelte.svg" class="logo svelte-kit" alt="SvelteKit Logo" />
+    </a>
+  </div>
+  <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
+  <a href="/"><button>RETURN TO /</button></a>
+  <br />
+
+  <form class="row" onsubmit={greet}>
+    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
+    <button type="submit">Greet</button>
+  </form>
+  <p>{greetMsg}</p>
 </main>
 
 <style>
+.logo.vite:hover {
+  filter: drop-shadow(0 0 2em #747bff);
+}
+
+.logo.svelte-kit:hover {
+  filter: drop-shadow(0 0 2em #ff3e00);
+}
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -27,13 +61,24 @@
   -webkit-text-size-adjust: 100%;
 }
 
-:global(.container) {
+.container {
   margin: 0;
   padding-top: 10vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: 0.75s;
+}
+
+.logo.tauri:hover {
+  filter: drop-shadow(0 0 2em #24c8db);
 }
 
 .row {
@@ -55,8 +100,8 @@ h1 {
   text-align: center;
 }
 
-:global(input),
-:global(button) {
+input,
+button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -67,19 +112,27 @@ h1 {
   background-color: #ffffff;
   transition: border-color 0.25s;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-  outline: none;
 }
 
-:global(button) {
+button {
   cursor: pointer;
 }
 
-:global(button:hover) {
+button:hover {
   border-color: #396cd8;
 }
-:global(button:active) {
+button:active {
   border-color: #396cd8;
   background-color: #e8e8e8;
+}
+
+input,
+button {
+  outline: none;
+}
+
+#greet-input {
+  margin-right: 5px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -92,13 +145,14 @@ h1 {
     color: #24c8db;
   }
 
-  :global(input),
-  :global(button) {
+  input,
+  button {
     color: #ffffff;
     background-color: #0f0f0f98;
   }
-  :global(button:active) {
+  button:active {
     background-color: #0f0f0f69;
   }
 }
+
 </style>

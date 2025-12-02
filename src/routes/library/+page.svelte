@@ -1,5 +1,8 @@
 <script lang="ts">
-    let x = $state(0);
+    import Card from './card.svelte';
+	import type { PageProps } from './$types';
+	let { data }: PageProps = $props();
+    const src: string | null = data.src;
 </script>
 
 <main class="container">
@@ -9,3 +12,5 @@
     </p>
     <a href="/"><button>Back</button></a>
 </main>
+
+<Card {src} />
